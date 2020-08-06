@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:viewParam name="cardacao" value="#{cartaoBean.acao}" />
+			<f:viewParam name="cardcod" value="#{cartaoBean.codigo}" />
+			<f:event listener="#{cartaoBean.carregarCadastro()}"
+				type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+	<ui:define name="conteudo">
+
+		<h:form id="frmCardCad">
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cadastro de Cartão" />
+				</f:facet>
+			</p:toolbar>
+			<h:panelGrid id="pnlCardCadDados" columns="2">
+			
+				<p:outputLabel value="Código:" />
+				<p:inputText size="10" readonly="true"
+					value="#{cartaoBean.cartaoCadastro.codigo}" />
+
+				<p:outputLabel value="Nome:" />
+				<p:inputText size="20" readonly="#{cartaoBean.acao == 'Excluir'}"
+					value="#{cartaoBean.cartaoCadastro.nome}">
+					<f:validateBean />
+				</p:inputText>
+				
+				<p:outputLabel value="Bandeira:" />
+				<p:inputText maxlength="25" size="25"
+					readonly="#{cartaoBean.acao == 'Excluir'}"
+					value="#{cartaoBean.cartaoCadastro.bandeira}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Número do cartão:" />
+				<p:inputText maxlength="25" size="25"
+					readonly="#{cartaoBean.acao == 'Excluir'}"
+					value="#{cartaoBean.cartaoCadastro.numero}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Código de Segurança:" />
+				<p:inputText size="20" readonly="#{cartaoBean.acao == 'Excluir'}"
+					value="#{cartaoBean.cartaoCadastro.codseguranca}">
+					<f:validateBean />
+				</p:inputText>
+
+				<p:outputLabel value="Data de Validade:" />
+				<p:inputMask size="20" mask="99/9999" readonly="#{cartaoBean.acao == 'Excluir'}"
+					value="#{cartaoBean.cartaoCadastro.datavalidade}">
+							<f:convertDateTime pattern="MM/yyyy"
+							timeZone="America/Sao_Paulo" />
+					<f:validateBean />
+				</p:inputMask>
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<p:commandButton value="Novo" actionListener="#{cartaoBean.novo()}"
+					rendered="#{cartaoBean.acao == 'Novo'}" process="@this"
+					update=":frmCardCad:pnlCardCadDados">
+					<p:resetInput target="pnlCardCadDados" />
+					</p:commandButton>
+				<p:commandButton value="Salvar"
+					actionListener="#{cartaoBean.salvar()}"
+					rendered="#{cartaoBean.acao == 'Novo'}"
+					update=":msgGlobal :frmCardCad:pnlCardCadDados" />
+				<p:button value="Voltar"
+					outcome="/pages/cartaoPesquisarA.xhtml?faces-redirect=true" />
+				<p:commandButton value="Excluir"
+					rendered="#{cartaoBean.acao == 'Excluir'}"
+					actionListener="#{cartaoBean.excluir()}" update=":msgGlobal" />
+				<p:commandButton value="Editar"
+					rendered="#{cartaoBean.acao == 'Editar'}"
+					actionListener="#{cartaoBean.editar()}" update=":msgGlobal" />
+			</h:panelGrid>
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>
+
+</html>

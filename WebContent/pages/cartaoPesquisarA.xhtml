@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="/templates/modeloGeral.xhtml">
+	<ui:define name="metadata">
+		<f:metadata>
+			<f:event listener="#{cartaoBean.carregar}" type="preRenderView" />
+		</f:metadata>
+	</ui:define>
+	<ui:define name="conteudo">
+		<f:event listener="#{cartaoBean.carregar}" type="preRenderView" />
+		<h:form>
+			<p:toolbar>
+				<f:facet name="left">
+					<h:outputText value="Cartões" />
+				</f:facet>
+			</p:toolbar>
+
+			<p:dataTable id="tblCartoes" emptyMessage="Nenhum registro encontrado!"
+				value="#{cartaoBean.listaCartao}"
+				filteredValue="#{cartaoBean.listaCartaoFiltrados}" var="cartao"
+				rows="10" paginator="true">
+
+				<f:facet name="header">
+						<h:commandLink>
+							<p:graphicImage library="images" name="microsoft-excel-512.png" width="35"/>
+							<p:dataExporter type="xls" target="tblCartoes" fileName="Cartoes" />
+						</h:commandLink>
+
+						<h:commandLink>
+							<p:graphicImage library="images" name="wordpress-pdf-icon.png" width="101"/>
+							<p:dataExporter type="pdf" target="tblCartoes" fileName="Cartoes" encoding="ISO-8859-1"/>
+						</h:commandLink>
+				</f:facet>
+
+				<f:facet name="footer">
+					<p:button value="Novo" outcome="/pages/cartaoCadastroA.xhtml">
+						<f:param name="cardacao" value="Novo" />
+					</p:button>
+				</f:facet>
+
+		  		<p:column headerText="Código">
+					<h:outputText value="#{cartao.codigo}" />
+				</p:column>
+				<p:column headerText="Bandeira">
+					<h:outputText value="#{cartao.bandeira}" />
+				</p:column>
+				<p:column headerText="Nome" >
+					<h:outputText value="#{cartao.nome}" />
+				</p:column>
+				<p:column headerText="Número do cartão">
+					<h:outputText value="#{cartao.numero}" />
+				</p:column>
+				<p:column headerText="Validade">
+					<h:outputText value="#{cartao.datavalidade}" >
+					<f:convertDateTime pattern="MM/yyyy"
+							timeZone="America/Sao_Paulo" />
+					</h:outputText>
+				</p:column>
+				
+
+				<p:column headerText="Opções" exportable="false">
+					<p:button value="Excluir" outcome="/pages/cartaoCadastroA.xhtml">
+						<f:param name="cardacao" value="Excluir" />
+						<f:param name="cardcod" value="#{cartao.codigo}" />
+					</p:button>
+					<p:button value="Editar" outcome="/pages/cartaoCadastroA.xhtml">
+						<f:param name="cardacao" value="Editar" />
+						<f:param name="cardcod" value="#{cartao.codigo}" />
+					</p:button>
+				</p:column>
+
+			</p:dataTable>
+		</h:form>
+
+	</ui:define>
+</ui:composition>
+
+</html>
